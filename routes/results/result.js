@@ -6,8 +6,9 @@ const {
   verifyTokenAndTeacher,
 } = require("../../helpers/jsonwebtoken");
 const { Sequelize, Op } = require("sequelize");
+const { Students } = require("../../models");
 
-// CREATE A Results
+// CREATE A Results***********************************************************
 router.post("/", async (req, res) => {
   // Generate userId with a custom function
   const generateResultsId = () => {
@@ -20,50 +21,40 @@ router.post("/", async (req, res) => {
     return resultsId;
   };
 
-  // Capture user details
-  const newResults = {
-    class: req.body.class,
-    exam: req.body.exam,
-    firstname: req.body.firstname,
-    lastname: req.body.lastname,
-    attendence: req.body.attendence,
-    marks: [
-      {
-        [req.body.subject]: Number(req.body.mark),
-      },
-    ],
-    resultsId: generateResultsId(),
-  };
-
   try {
+    // Capture user details*********************
+    const newResults = {
+      class: req.body.class,
+      exam: req.body.exam,
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      term: req.body.term,
+      attendence: req.body.attendence,
+      marks: [
+        {
+          examname: req.body.examname,
+          subject: req.body.subject,
+          mark: Number(req.body.mark),
+          grade: req.body.grade,
+          // [req.body.subject]: Number(req.body.mark),
+        },
+      ],
+      resultsId: generateResultsId(),
+    };
+
     const results = await Results.findOne({
       where: { firstname: req.body.firstname, lastname: req.body.lastname },
     });
 
     if (results) {
-      // First, check if the subject already exists in the marks JSON
-      // const result = await Results.findOne({
-      //   where: {
-      //     marks: {
-      //       [Op.and]: Sequelize.literal(
-      //         `JSON_CONTAINS(marks, '${req.body.subject}')`
-      //       ),
-      //     },
-      //   },
-      // });
-
-      // if (result) {
-      // If the subject exists, return a 400 error
-      // return res.status(400).json({
-      //   message: `Subject, ${req.body.subject} already exists for this student`,
-      // });
-      // } else {
       await Results.update(
         {
           marks: Sequelize.literal(
-            `JSON_ARRAY_APPEND(marks, '$', '{${JSON.stringify(
-              req.body.subject
-            )}: ${JSON.parse(req.body.mark)}}')`
+            `JSON_ARRAY_APPEND(marks, '$', '{
+              examname: ${JSON.stringify(req.body.examname)},
+              subject: ${JSON.stringify(req.body.subject)},
+              grade: ${JSON.stringify(req.body.grade)},
+              mark: ${Number(req.body.mark)}}')`
           ),
         },
         {
@@ -76,7 +67,23 @@ router.post("/", async (req, res) => {
       return res.status(200).json("Results updated successfully");
       // }
     } else {
-      //  Create Results, save him in the db and send response
+      const student = await Students.findOne({
+        where: {
+          firstname: req.body.firstname,
+          lastname: req.body.lastname,
+          clas: req.body.class,
+        },
+      });
+
+      // Check if student with provided details exist in the students database,
+      // and get his profile image from there and add it to his results
+      if (student) {
+        console.log(student);
+        newResults.studentImage = student.profileimage;
+      } else {
+        console.log("No student");
+      }
+      //  Create Results, save him in the db and send response if there is a student
       const result = await Results.create(newResults);
       return res
         .status(201)
@@ -88,7 +95,103 @@ router.post("/", async (req, res) => {
   }
 });
 
-// UPDATE Results  ***********************
+// Get results by subject name **********************************************
+router.get("/getbysubject/:subjectname", async (req, res) => {
+  try {
+    const results = await Results.findAll({
+      // where: Sequelize.literal(
+      //   `JSON_CONTAINS(marks, '{"subject": "${req.params.subjectname}" }')`
+      // ),
+      // where: Sequelize.literal(
+      //   `JSON_CONTAINS(marks, '{"subject": "${req.params.subjectname}" }')`
+      // ),
+      where: Sequelize.literal(
+        `JSON_SEARCH(marks, 'all', '${req.params.subjectname}', null, '$[*].subject') IS NOT NULL`
+      ),
+    });
+
+    const parsedResults = results?.map((result) => {
+      const marks = Array.isArray(result.marks)
+        ? result.marks.map((mark) => {
+            if (typeof mark === "string") {
+              return eval(`(${mark})`);
+            }
+            return mark;
+          })
+        : JSON.parse(result.marks).map((mark) => {
+            if (typeof mark === "string") {
+              return eval(`(${mark})`);
+            }
+            return mark;
+          });
+      return {
+        class: result.class,
+        exam: result.exam,
+        firstname: result.firstname,
+        lastname: result.lastname,
+        studentImage: result.studentImage,
+        attendence: result.attendence,
+        term: result.term,
+        marks,
+        resultsId: result.resultsId,
+        createdAt: result.createdAt,
+        updatedAt: result.updatedAt,
+      };
+    });
+
+    return res.status(200).json(parsedResults);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json("Internal server error");
+  }
+});
+
+// Get results by exam name **********************************************
+router.get("/getbyexam/exam/:examname", async (req, res) => {
+  try {
+    const results = await Results.findAll({
+      where: Sequelize.literal(
+        `JSON_CONTAINS(marks, '{"examname": "${req.params.examname}" }')`
+      ),
+    });
+
+    const parsedResults = results?.map((result) => {
+      const marks = Array.isArray(result.marks)
+        ? result.marks.map((mark) => {
+            if (typeof mark === "string") {
+              return eval(`(${mark})`);
+            }
+            return mark;
+          })
+        : JSON.parse(result.marks).map((mark) => {
+            if (typeof mark === "string") {
+              return eval(`(${mark})`);
+            }
+            return mark;
+          });
+      return {
+        class: result.class,
+        exam: result.exam,
+        firstname: result.firstname,
+        lastname: result.lastname,
+        studentImage: result.studentImage,
+        attendence: result.attendence,
+        term: result.term,
+        marks,
+        resultsId: result.resultsId,
+        createdAt: result.createdAt,
+        updatedAt: result.updatedAt,
+      };
+    });
+
+    return res.status(200).json(parsedResults);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json("Internal server error");
+  }
+});
+
+// UPDATE Results  **********************************************************
 router.put("/:id", verifyTokenAndTeacher, async (req, res) => {
   try {
     await Results.update(req.body, {
@@ -101,24 +204,24 @@ router.put("/:id", verifyTokenAndTeacher, async (req, res) => {
   }
 });
 
-// GET Results  **************************
+// GET Results  **************************************************************
 router.get("/", async (req, res) => {
   try {
     const results = await Results.findAll();
 
     // Map over the results array and parse the marks string into a JSON object
 
-    const parsedResults = results.map((result) => {
+    const parsedResults = results?.map((result) => {
       const marks = Array.isArray(result.marks)
         ? result.marks.map((mark) => {
             if (typeof mark === "string") {
-              return JSON.parse(mark).replace(/\\/g, "");
+              return eval(`(${mark})`);
             }
             return mark;
           })
         : JSON.parse(result.marks).map((mark) => {
             if (typeof mark === "string") {
-              return JSON.parse(mark);
+              return eval(`(${mark})`);
             }
             return mark;
           });
@@ -127,7 +230,9 @@ router.get("/", async (req, res) => {
         exam: result.exam,
         firstname: result.firstname,
         lastname: result.lastname,
+        studentImage: result.studentImage,
         attendence: result.attendence,
+        term: result.term,
         marks,
         resultsId: result.resultsId,
         createdAt: result.createdAt,
@@ -142,8 +247,8 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET Results BY ID  **************************
-router.get("/:id", verifyToken, async (req, res) => {
+// GET Results BY ID  **********************************************************
+router.get("/:id", async (req, res) => {
   try {
     const result = await Results.findOne({
       where: { resultsId: req.params.id },
@@ -155,23 +260,26 @@ router.get("/:id", verifyToken, async (req, res) => {
   }
 });
 
-// GET Results by class name  **************************
-router.get("/find/:class", async (req, res) => {
+// GET Results BY Term  **********************************************************
+router.get("/exam/:examName", async (req, res) => {
   try {
     const results = await Results.findAll({
-      where: { class: req.params.class },
+      where: { exam: req.params.examName },
     });
+
     const parsedResults = results.map((result) => {
       const marks = Array.isArray(result.marks)
         ? result.marks.map((mark) => {
             if (typeof mark === "string") {
-              return JSON.parse(mark).replace(/\\/g, "");
+              // return JSON.parse(mark).replace(/\\/g, "");
+              return eval(`(${mark})`);
             }
             return mark;
           })
         : JSON.parse(result.marks).map((mark) => {
             if (typeof mark === "string") {
-              return JSON.parse(mark);
+              // return JSON.parse(mark);
+              return eval(`(${mark})`);
             }
             return mark;
           });
@@ -181,6 +289,8 @@ router.get("/find/:class", async (req, res) => {
         firstname: result.firstname,
         lastname: result.lastname,
         attendence: result.attendence,
+        studentImage: result.studentImage,
+        term: result.term,
         marks,
         resultsId: result.resultsId,
         createdAt: result.createdAt,
@@ -195,7 +305,51 @@ router.get("/find/:class", async (req, res) => {
   }
 });
 
-// DELETE/DEACTIVATE USER  **************************
+// GET Results by class name  ******************************************************
+router.get("/find/:class", async (req, res) => {
+  try {
+    const results = await Results.findAll({
+      where: { class: req.params.class },
+    });
+    const parsedResults = results.map((result) => {
+      const marks = Array.isArray(result.marks)
+        ? result.marks.map((mark) => {
+            if (typeof mark === "string") {
+              // return JSON.parse(mark).replace(/\\/g, "");
+              return eval(`(${mark})`);
+            }
+            return mark;
+          })
+        : JSON.parse(result.marks).map((mark) => {
+            if (typeof mark === "string") {
+              // return JSON.parse(mark);
+              return eval(`(${mark})`);
+            }
+            return mark;
+          });
+      return {
+        class: result.class,
+        exam: result.exam,
+        firstname: result.firstname,
+        lastname: result.lastname,
+        attendence: result.attendence,
+        studentImage: result.studentImage,
+        term: result.term,
+        marks,
+        resultsId: result.resultsId,
+        createdAt: result.createdAt,
+        updatedAt: result.updatedAt,
+      };
+    });
+
+    return res.status(200).json(parsedResults);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
+// DELETE/DEACTIVATE USER  ******************************************************
 router.delete("/:id", verifyTokenAndTeacher, async (req, res) => {
   try {
     await Results.destroy({

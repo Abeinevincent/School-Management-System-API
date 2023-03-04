@@ -5,6 +5,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
 
+    term: {
+      type: DataTypes.STRING,
+    },
+
     exam: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -26,6 +30,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.JSON,
       allowNull: true,
       defaultValue: [],
+    },
+
+    studentImage: {
+      type: DataTypes.STRING,
     },
 
     resultsId: {

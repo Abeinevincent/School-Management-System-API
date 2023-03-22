@@ -10,8 +10,9 @@ module.exports = (sequelize, DataTypes) => {
     },
 
     exam: {
-      type: DataTypes.STRING,
+      type: DataTypes.JSON,
       allowNull: false,
+      defaultValue: {},
     },
 
     firstname: {
@@ -28,7 +29,11 @@ module.exports = (sequelize, DataTypes) => {
 
     marks: {
       type: DataTypes.JSON,
-      allowNull: true,
+      defaultValue: [],
+    },
+
+    marks2: {
+      type: DataTypes.JSON,
       defaultValue: [],
     },
 

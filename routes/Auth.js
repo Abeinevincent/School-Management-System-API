@@ -94,14 +94,25 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// LOGIN TEACHER **************************
-router.post("/loginTeacher", async (req, res) => {
+// LOGIN OTHER USERS NOT ADMIN *******************************************************************
+router.post("/loginuser", async (req, res) => {
   try {
+    // Check teacher availability *******************
     const teacher = await Teachers.findOne({
       where: { username: req.body.username },
     });
 
-    if (!teacher) {
+    // Check student availability ******************
+    const student = await Students.findOne({
+      where: { username: req.body.username },
+    });
+
+    // Check non teaching staff availability **************
+    const nonteachingstaff = await NonTeachingStaff.findOne({
+      where: { username: req.body.username },
+    });
+
+    if (!teacher && !nonteachingstaff && !student) {
       return res
         .status(404)
         .json(
@@ -111,14 +122,34 @@ router.post("/loginTeacher", async (req, res) => {
 
     // Token payload
     const tokenPayload = {
-      id: teacher.teacherId,
-      username: teacher.username,
-      isTeacher: teacher.isTeacher,
+      id: teacher
+        ? teacher.teacherId
+        : nonteachingstaff
+        ? nonteachingstaff.nonteachingstaffId
+        : student
+        ? student.studentId
+        : null,
+      username: teacher
+        ? teacher.username
+        : nonteachingstaff
+        ? nonteachingstaff.username
+        : student
+        ? student.studentId
+        : null,
+      isTeacher: teacher?.isTeacher,
+      isStudent: student?.isStudent,
+      isNonteachingstaff: nonteachingstaff?.isNonteachingstaff,
     };
 
     return res.status(200).json({
       message: "User login successful",
-      teacher,
+      user: teacher
+        ? teacher
+        : nonteachingstaff
+        ? nonteachingstaff
+        : student
+        ? student
+        : null,
       token: generateToken(tokenPayload),
     });
   } catch (err) {
@@ -128,69 +159,69 @@ router.post("/loginTeacher", async (req, res) => {
 });
 
 // LOGIN STUDENT **************************
-router.post("/loginStudent", async (req, res) => {
-  try {
-    const student = await Students.findOne({
-      where: { username: req.body.username },
-    });
+// router.post("/loginStudent", async (req, res) => {
+//   try {
+//     const student = await Students.findOne({
+//       where: { username: req.body.username },
+//     });
 
-    if (!student) {
-      return res
-        .status(404)
-        .json(
-          "User with the provided username doesnot exist, please create an account!"
-        );
-    }
+//     if (!student) {
+//       return res
+//         .status(404)
+//         .json(
+//           "User with the provided username doesnot exist, please create an account!"
+//         );
+//     }
 
-    // Token payload
-    const tokenPayload = {
-      id: student.studentId,
-      username: student.username,
-      isTeacher: student.isStudent,
-    };
+//     // Token payload
+//     const tokenPayload = {
+//       id: student.studentId,
+//       username: student.username,
+//       isTeacher: student.isStudent,
+//     };
 
-    return res.status(200).json({
-      message: "User login successful",
-      student,
-      token: generateToken(tokenPayload),
-    });
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json(err);
-  }
-});
+//     return res.status(200).json({
+//       message: "User login successful",
+//       student,
+//       token: generateToken(tokenPayload),
+//     });
+//   } catch (err) {
+//     console.log(err);
+//     return res.status(500).json(err);
+//   }
+// });
 
 // LOGIN NONTEACHINGSTAFF **************************
-router.post("/loginNonteachingstaff", async (req, res) => {
-  try {
-    const nonteachingstaff = await NonTeachingStaff.findOne({
-      where: { username: req.body.username },
-    });
+// router.post("/loginNonteachingstaff", async (req, res) => {
+//   try {
+//     const nonteachingstaff = await NonTeachingStaff.findOne({
+//       where: { username: req.body.username },
+//     });
 
-    if (!nonteachingstaff) {
-      return res
-        .status(404)
-        .json(
-          "User with the provided username doesnot exist, please create an account!"
-        );
-    }
+//     if (!nonteachingstaff) {
+//       return res
+//         .status(404)
+//         .json(
+//           "User with the provided username doesnot exist, please create an account!"
+//         );
+//     }
 
-    // Token payload
-    const tokenPayload = {
-      id: nonteachingstaff.nonteachingstaffId,
-      username: nonteachingstaff.username,
-      isNonteachingstaff: nonteachingstaff.isNonteachingstaff,
-    };
+//     // Token payload
+//     const tokenPayload = {
+//       id: nonteachingstaff.nonteachingstaffId,
+//       username: nonteachingstaff.username,
+//       isNonteachingstaff: nonteachingstaff.isNonteachingstaff,
+//     };
 
-    return res.status(200).json({
-      message: "User login successful",
-      nonteachingstaff,
-      token: generateToken(tokenPayload),
-    });
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json(err);
-  }
-});
+//     return res.status(200).json({
+//       message: "User login successful",
+//       nonteachingstaff,
+//       token: generateToken(tokenPayload),
+//     });
+//   } catch (err) {
+//     console.log(err);
+//     return res.status(500).json(err);
+//   }
+// });
 
 module.exports = router;

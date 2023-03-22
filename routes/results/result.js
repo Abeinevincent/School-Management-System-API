@@ -1,10 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { Results } = require("../../models");
-const {
-  verifyToken,
-  verifyTokenAndTeacher,
-} = require("../../helpers/jsonwebtoken");
+const { verifyTokenAndTeacher } = require("../../helpers/jsonwebtoken");
 const { Sequelize, Op } = require("sequelize");
 const { Students } = require("../../models");
 
@@ -25,7 +22,16 @@ router.post("/", async (req, res) => {
     // Capture user details*********************
     const newResults = {
       class: req.body.class,
-      exam: req.body.exam,
+      exam: {
+        examname: req.body.exam,
+        marks: [
+          {
+            subject: req.body.subject,
+            mark: Number(req.body.mark),
+            grade: req.body.grade,
+          },
+        ],
+      },
       firstname: req.body.firstname,
       lastname: req.body.lastname,
       term: req.body.term,
@@ -36,17 +42,29 @@ router.post("/", async (req, res) => {
           subject: req.body.subject,
           mark: Number(req.body.mark),
           grade: req.body.grade,
-          // [req.body.subject]: Number(req.body.mark),
         },
       ],
       resultsId: generateResultsId(),
     };
 
     const results = await Results.findOne({
-      where: { firstname: req.body.firstname, lastname: req.body.lastname },
+      where: {
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        class: req.body.class,
+      },
     });
 
     if (results) {
+      // Also check if the exam name has changed and create new exam(exam2 and keep on incrementing)
+      //   const examSetResults = await Results.findOne({
+      //   where: {
+      //     firstname: req.body.firstname,
+      //     lastname: req.body.lastname,
+      //     exam: req.body.exam
+      //   }
+      // })
+
       await Results.update(
         {
           marks: Sequelize.literal(
@@ -227,7 +245,7 @@ router.get("/", async (req, res) => {
           });
       return {
         class: result.class,
-        exam: result.exam,
+        exam: JSON.parse(result.exam),
         firstname: result.firstname,
         lastname: result.lastname,
         studentImage: result.studentImage,

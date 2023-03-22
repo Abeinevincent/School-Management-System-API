@@ -60,6 +60,7 @@ router.post("/", verifyTokenAndAdmin, async (req, res) => {
         .status(201)
         .json({ message: "Teacher created successfully", teacher });
     } catch (err) {
+      console.log(err);
       return res.status(500).json(err);
     }
   }

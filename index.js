@@ -19,6 +19,7 @@ const libraryRoute = require("./routes/library/library");
 const feesRoute = require("./routes/fees/fees");
 const examRoute = require("./routes/exam/exam");
 const marksRoute = require("./routes/marks/marks");
+const StoreRoute = require("./routes/storemanager/storemanager");
 const accounttypeRoute = require("./routes/accounttype/accounttype");
 
 // Middlewares
@@ -62,6 +63,7 @@ app.use("/api/fees", feesRoute);
 app.use("/api/exams", examRoute);
 app.use("/api/marks", marksRoute);
 app.use("/api/accounttype", accounttypeRoute);
+app.use("/api/storemanager", StoreRoute);
 
 // Configure sequelize to sync all models and create corresponding tables accordingly
 database.sequelize.sync().then(() => {

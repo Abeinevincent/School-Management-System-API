@@ -48,7 +48,7 @@ router.put("/:id", verifyTokenAndAuthorization, async (req, res) => {
     await StoreManager.update(req.body, {
       where: { storeId: req.params.id },
     });
-    return res.status(200).json({"Store updated successfully" });
+    return res.status(200).json("Store updated successfully");
   } catch (err) {
     console.log(err);
     return res.status(500).json(err);

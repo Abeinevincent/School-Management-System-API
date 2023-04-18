@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
 
     subjectTeacher: {
       type: DataTypes.STRING,
+      defaultValue: "N/A",
     },
 
     subjectId: {

@@ -21,12 +21,13 @@ router.post("/", verifyToken, async (req, res) => {
   };
 
   // Capture user details
-  const { itemImage, category, itemName, itemQuantity } = req.body;
+  const { itemImage, category, itemName, takenBy, itemQuantity } = req.body;
   const newStoreItem = {
     itemImage,
     category,
     itemName,
     itemQuantity,
+    takenBy,
     storeId: generateStoreId(),
   };
 

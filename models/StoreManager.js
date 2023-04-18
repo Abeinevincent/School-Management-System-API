@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.NUMBER,
       allowNull: false,
     },
+    takenBy: {
+      type: DataTypes.STRING,
+      defaultValue: "N/A",
+    },
     category: {
       type: DataTypes.STRING,
       allowNull: false,

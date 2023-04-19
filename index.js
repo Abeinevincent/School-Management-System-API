@@ -26,6 +26,17 @@ const accounttypeRoute = require("./routes/accounttype/accounttype");
 // Middlewares
 
 app.use(express.json());
+// Allow requests from your frontend URL
+const allowedOrigins = ['http://localhost:5173/'];
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+};
 app.use(cors());
 
 // Image Upload with multer

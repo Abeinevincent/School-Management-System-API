@@ -51,6 +51,11 @@ router.post("/", verifyTokenAndTeacher, async (req, res) => {
   }
 });
 
+
+
+// POST TO A GENERAL PURPOSE API THAT RECEIVES THEM ALL **********************************************
+router.post("/subject/separatemarks")
+
 // UPDATE Subject  ***********************
 router.put("/:id", verifyTokenAndTeacher, async (req, res) => {
   try {

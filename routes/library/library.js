@@ -20,13 +20,25 @@ router.post("/", verifyTokenAndTeacher, async (req, res) => {
   };
 
   // Capture user details
+  const {
+    className,
+    subjectName,
+    releasedAgainst,
+    bookAuthor,
+    bookTitle,
+    publication,
+    userId,
+    status,
+  } = req.body;
   const newLibrary = {
-    class: req.body.class,
-    userId: req.body.userId,
-    subject: req.body.subject,
-    bookAuthor: req.body.bookAuthor,
-    bookName: req.body.bookName,
-    bookFile: req.body.bookFile,
+    className,
+    subjectName,
+    bookAuthor,
+    bookTitle,
+    publication,
+    userId,
+    status,
+    releasedAgainst,
     libraryId: generateLibraryId(),
   };
 
@@ -43,10 +55,18 @@ router.post("/", verifyTokenAndTeacher, async (req, res) => {
 });
 
 // UPDATE Library  ***********************
-router.put("/:id", verifyTokenAndTeacher, async (req, res) => {
+router.put("/", verifyTokenAndTeacher, async (req, res) => {
   try {
+    const bookToUpdate = await Library.findOne({
+      where: {
+        bookTitle: req.body.bookTitle,
+      },
+    });
+
     await Library.update(req.body, {
-      where: { libraryId: req.params.id },
+      where: {
+        bookTitle: req.body.bookTitle,
+      },
     });
     return res.status(200).json({ library: "Library updated successfully" });
   } catch (err) {

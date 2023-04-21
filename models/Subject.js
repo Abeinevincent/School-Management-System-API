@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
 
     className: {
       type: DataTypes.STRING,
+      defaultValue: "N/A",
     },
 
     subjectName: {

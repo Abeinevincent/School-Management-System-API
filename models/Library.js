@@ -1,10 +1,10 @@
 module.exports = (sequelize, DataTypes) => {
   const Library = sequelize.define("Library", {
-    class: {
+    className: {
       type: DataTypes.STRING,
     },
 
-    subject: {
+    subjectName: {
       type: DataTypes.STRING,
     },
 
@@ -12,15 +12,25 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
 
-    bookName: {
+    bookTitle: {
       type: DataTypes.STRING,
     },
 
     bookAuthor: {
       type: DataTypes.STRING,
+      required: true,
     },
 
-    bookFile: {
+    status: {
+      type: DataTypes.STRING,
+      defaultValue: "Available", // can also be lent
+    },
+
+    releasedAgainst: {
+      type: DataTypes.STRING,
+    },
+
+    publication: {
       type: DataTypes.STRING,
     },
 

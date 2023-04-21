@@ -7,6 +7,18 @@ module.exports = (sequelize, DataTypes) => {
       max: 250,
     },
 
+    nin: {
+      type: DataTypes.STRING,
+    },
+
+    parentEmail: {
+      type: DataTypes.STRING,
+    },
+
+    status: {
+      type: DataTypes.STRING,
+    },
+
     email: {
       type: DataTypes.STRING,
     },

@@ -7,7 +7,7 @@ const {
 } = require("../../helpers/jsonwebtoken");
 
 // CREATE A Message
-router.post("/", verifyTokenAndTeacher, async (req, res) => {
+router.post("/", verifyToken, async (req, res) => {
   // Generate userId with a custom function
   const generateMessageId = () => {
     let dt = new Date().getTime();
@@ -20,10 +20,12 @@ router.post("/", verifyTokenAndTeacher, async (req, res) => {
   };
 
   // Capture user details
+  const { receiverName, title, senderId, message } = req.body;
   const newMessage = {
-    title: req.body.title,
-    userId: req.body.userId,
-    info: req.body.info,
+    title,
+    senderId,
+    receiverName,
+    message,
     messageId: generateMessageId(),
   };
 

@@ -16,6 +16,7 @@ const sylabusRoute = require("./routes/sylabus/sylabus");
 const resultsRoute = require("./routes/results/result");
 const noticeRoute = require("./routes/noticeboard/noticeboard");
 const messageRoute = require("./routes/message/message");
+const classFeeRoute = require("./routes/fees/ClassFees");
 const libraryRoute = require("./routes/library/library");
 const feesRoute = require("./routes/fees/fees");
 const examRoute = require("./routes/exam/exam");
@@ -27,15 +28,15 @@ const accounttypeRoute = require("./routes/accounttype/accounttype");
 
 app.use(express.json());
 // Allow requests from your frontend URL
-const allowedOrigins = ['http://localhost:5173/'];
+const allowedOrigins = ["http://localhost:5173/"];
 const corsOptions = {
   origin: function (origin, callback) {
     if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      callback(new Error("Not allowed by CORS"));
     }
-  }
+  },
 };
 app.use(cors());
 
@@ -72,6 +73,7 @@ app.use("/api/results", resultsRoute);
 app.use("/api/noticeboard", noticeRoute);
 app.use("/api/message", messageRoute);
 app.use("/api/library", libraryRoute);
+app.use("/api/classfee", classFeeRoute);
 app.use("/api/fees", feesRoute);
 app.use("/api/exams", examRoute);
 app.use("/api/marks", marksRoute);

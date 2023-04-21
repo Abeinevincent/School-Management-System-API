@@ -4,15 +4,15 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
 
-    title: {
+    receiverName: {
       type: DataTypes.STRING,
     },
 
-    userId: {
+    senderId: {
       type: DataTypes.STRING,
     },
 
-    info: {
+    message: {
       type: DataTypes.STRING,
     },
 

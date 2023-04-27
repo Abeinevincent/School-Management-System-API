@@ -17,10 +17,10 @@ router.post("/", verifyToken, async (req, res) => {
   };
 
   // Capture user details
-  const { itemname, image, amount, category } = req.body;
+  const { itemName, image, amount, category } = req.body;
 
   const newIncome = {
-    itemname,
+    itemName,
     image,
     amount,
     category,
@@ -33,7 +33,7 @@ router.post("/", verifyToken, async (req, res) => {
 
     return res
       .status(201)
-      .json({ message: "Incomes created successfully", depts });
+      .json({ message: "Incomes created successfully", incomes });
   } catch (err) {
     console.log(err);
     return res.status(500).json(err);

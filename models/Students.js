@@ -9,14 +9,17 @@ module.exports = (sequelize, DataTypes) => {
 
     nin: {
       type: DataTypes.STRING,
+      defaultValue: "N/A",
     },
 
     parentEmail: {
       type: DataTypes.STRING,
+      defaultValue: "N/A",
     },
 
     status: {
       type: DataTypes.STRING,
+      defaultValue: "N/A",
     },
 
     email: {
@@ -35,6 +38,7 @@ module.exports = (sequelize, DataTypes) => {
 
     contact: {
       type: DataTypes.STRING,
+      defaultValue: "N/A",
     },
 
     address: {
@@ -54,6 +58,7 @@ module.exports = (sequelize, DataTypes) => {
 
     stream: {
       type: DataTypes.STRING,
+      defaultValue: "N/A",
     },
 
     dateofbirth: {
@@ -73,10 +78,12 @@ module.exports = (sequelize, DataTypes) => {
 
     hostel: {
       type: DataTypes.STRING,
+      defaultValue: "N/A",
     },
 
     transport: {
       type: DataTypes.STRING,
+      defaultValue: "N/A",
     },
 
     profileimage: {
@@ -86,6 +93,7 @@ module.exports = (sequelize, DataTypes) => {
 
     role: {
       type: DataTypes.STRING,
+      defaultValue: "N/A",
     },
 
     password: {

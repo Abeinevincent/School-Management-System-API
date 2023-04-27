@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const Incomes = sequelize.define("Incomes", {
-    itemname: {
+    itemName: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
@@ -10,9 +10,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true,
     },
-    
+
     amount: {
-      type: DataTypes.STRING,
+      type: DataTypes.NUMBER,
       allowNull: false,
       unique: true,
     },

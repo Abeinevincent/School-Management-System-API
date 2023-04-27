@@ -8,17 +8,11 @@ module.exports = (sequelize, DataTypes) => {
     category: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
     },
 
     amount: {
-      type: DataTypes.STRING,
+      type: DataTypes.NUMBER,
       allowNull: false,
-      unique: true,
-    },
-
-    image: {
-      type: DataTypes.STRING,
     },
 
     expenditureId: {

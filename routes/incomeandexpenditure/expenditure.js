@@ -17,11 +17,10 @@ router.post("/", verifyToken, async (req, res) => {
   };
 
   // Capture user details
-  const { itemname, image, amount, category } = req.body;
+  const { itemname, amount, category } = req.body;
 
   const newExpenditure = {
     itemname,
-    image,
     amount,
     category,
     expenditureId: generateId(),
@@ -33,7 +32,7 @@ router.post("/", verifyToken, async (req, res) => {
 
     return res
       .status(201)
-      .json({ message: "Expenditures created successfully", depts });
+      .json({ message: "Expenditures created successfully", expenditures });
   } catch (err) {
     console.log(err);
     return res.status(500).json(err);

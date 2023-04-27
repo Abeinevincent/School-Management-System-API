@@ -10,6 +10,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
 
+    redirect: {
+      type: DataTypes.STRING,
+    },
+
     code: {
       type: DataTypes.STRING,
       allowNull: false,

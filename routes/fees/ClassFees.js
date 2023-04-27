@@ -4,6 +4,7 @@ const { ClassFees } = require("../../models");
 const {
   verifyToken,
   verifyTokenAndTeacher,
+  verifyTokenAndAdmin,
 } = require("../../helpers/jsonwebtoken");
 
 // CREATE A Fee
@@ -41,6 +42,60 @@ router.get("/", verifyToken, async (req, res) => {
   try {
     const fees = await ClassFees.findAll();
     return res.status(200).json(fees);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
+// UPDATE CLASS FEE************************************
+router.put("/:id", verifyToken, async (req, res) => {
+  try {
+    await ClassFees.update(req.body, {
+      where: { classfeeId: req.params.id },
+    });
+    return res.status(200).json({ fees: "Class fee updated successfully" });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
+// GET Fee BY ID  **************************
+router.get("/:id", verifyToken, async (req, res) => {
+  try {
+    const fees = await ClassFees.findOne({
+      where: { classfeeId: req.params.id },
+    });
+    return res.status(200).json(fees);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
+// GET FEE BY CLASSNAME  **************************
+router.get("/findbyclass/:classname", verifyToken, async (req, res) => {
+  try {
+    const fees = await ClassFees.findOne({
+      where: { class: req.params.classname },
+    });
+    return res.status(200).json(fees);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
+// DELETE CLASS FEES  ****************************************
+router.delete("/:id", verifyTokenAndTeacher, async (req, res) => {
+  try {
+    await ClassFees.destroy({
+      where: {
+        classfeeId: req.params.id,
+      },
+    });
+    return res.status(200).json("Class fee has been deleted");
   } catch (err) {
     console.log(err);
     return res.status(500).json(err);

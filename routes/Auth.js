@@ -26,6 +26,8 @@ router.post("/register", async (req, res) => {
   const newUser = {
     username: req.body.username,
     email: req.body.email,
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
     // Hash/encrypt the password using CryptoJS and cypher algorithm
     password: hashedPassword,
     userId: generateUserId(),

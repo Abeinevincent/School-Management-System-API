@@ -2,11 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { Users } = require("../../models");
 const bcrypt = require("bcrypt");
-const {
-  verifyToken,
-  verifyTokenAndAdmin,
-  verifyTokenAndAuthorization,
-} = require("../../helpers/jsonwebtoken");
+const { verifyTokenAndAdmin } = require("../../helpers/jsonwebtoken");
 
 // UPDATE USER  ***********************
 router.put("/:id", verifyTokenAndAdmin, async (req, res) => {

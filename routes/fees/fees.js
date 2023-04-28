@@ -27,6 +27,7 @@ router.post("/", verifyToken, async (req, res) => {
     accountNumber,
     termname,
     amount,
+    bankname,
     scheme,
     accountType,
     classFeesAMount,

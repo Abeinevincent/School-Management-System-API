@@ -51,10 +51,8 @@ router.post("/", verifyTokenAndTeacher, async (req, res) => {
   }
 });
 
-
-
 // POST TO A GENERAL PURPOSE API THAT RECEIVES THEM ALL **********************************************
-router.post("/subject/separatemarks")
+router.post("/subject/separatemarks");
 
 // UPDATE Subject  ***********************
 router.put("/:id", verifyTokenAndTeacher, async (req, res) => {
@@ -109,7 +107,7 @@ router.get("/find/:subjectName", verifyToken, async (req, res) => {
 // GET SUBJECT BY CLASS NAME  **************************
 router.get("/find/class/:className", verifyToken, async (req, res) => {
   try {
-    const subject = await Subject.findOne({
+    const subject = await Subject.findAll({
       where: { className: req.params.className },
     });
     return res.status(200).json(subject);

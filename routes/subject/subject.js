@@ -106,6 +106,19 @@ router.get("/find/:subjectName", verifyToken, async (req, res) => {
   }
 });
 
+// GET SUBJECT BY CLASS NAME  **************************
+router.get("/find/class/:className", verifyToken, async (req, res) => {
+  try {
+    const subject = await Subject.findOne({
+      where: { className: req.params.className },
+    });
+    return res.status(200).json(subject);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
 // DELETE/DEACTIVATE USER  **************************
 router.delete("/:id", verifyTokenAndTeacher, async (req, res) => {
   try {

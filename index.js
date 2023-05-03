@@ -24,7 +24,7 @@ const marksRoute = require("./routes/marks/marks");
 const StoreRoute = require("./routes/storemanager/storemanager");
 const DepartmentsRoute = require("./routes/departments/departments");
 const accounttypeRoute = require("./routes/accounttype/accounttype");
-const OTPRoute = require("./helpers/passwordrecovery");
+// const OTPRoute = require("./helpers/passwordrecovery");
 const IncomeRoute = require("./routes/incomeandexpenditure/income");
 const ExpenditureRoute = require("./routes/incomeandexpenditure/expenditure");
 
@@ -84,7 +84,7 @@ app.use("/api/marks", marksRoute);
 app.use("/api/accounttype", accounttypeRoute);
 app.use("/api/storemanager", StoreRoute);
 app.use("/api/departments", DepartmentsRoute);
-app.use("/api/otp", OTPRoute);
+// app.use("/api/otp", OTPRoute);
 app.use("/api/income", IncomeRoute);
 app.use("/api/expenditure", ExpenditureRoute);
 

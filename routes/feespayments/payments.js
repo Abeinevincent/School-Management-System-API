@@ -31,8 +31,6 @@ router.post("/initiatepayment", async (req, res) => {
     }
   };
 
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3VzZXJkYXRhIjoiZWM5NDc3NTUtOWNkNS00YjFiLTg1ZTEtZGViNTViODE4N2VkIiwidWlkIjoiV1J6YldOL1l3UGdtN0V1ZTJTQ1Y1RzdWMjdPTUVYN20iLCJuYmYiOjE2ODM2MjgyOTcsImV4cCI6MTY4MzYyODU5NywiaWF0IjoxNjgzNjI4Mjk3LCJpc3MiOiJodHRwOi8vcGF5LnBlc2FwYWwuY29tLyIsImF1ZCI6Imh0dHA6Ly9wYXkucGVzYXBhbC5jb20vIn0.N3vrbXBgSOsOBkx44G2b8Nrt4tYhFPlwu4fzzWHBfsY";
   // REGISTER IPN URL
   const registerIPNUrl = async () => {
     try {
@@ -45,8 +43,7 @@ router.post("/initiatepayment", async (req, res) => {
         {
           headers: {
             "Content-Type": "application/json",
-            // Authorization: `Bearer ${generateToken()}`,
-            Authorization: `Bearer ${token}}`,
+            Authorization: `Bearer ${generateToken()}`,
           },
         }
       );

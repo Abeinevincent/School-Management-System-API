@@ -18,6 +18,7 @@ const generateFeeId = () => {
   });
   return accountId;
 };
+
 router.post("/", verifyToken, async (req, res) => {
   // Capture user details
   const {

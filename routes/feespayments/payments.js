@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const axios = require("axios");
+const { verifyToken } = require("../../helpers/jsonwebtoken");
 
 // Generate userId with a custom function
 const generateUniqueId = () => {
@@ -13,7 +14,7 @@ const generateUniqueId = () => {
   return id;
 };
 
-router.post("/initiatepayment", async (req, res) => {
+router.post("/initiatepayment", verifyToken, async (req, res) => {
   // Define the headers to be sent in the POST request
   const headers = {
     "Content-Type": "application/json",

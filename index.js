@@ -27,6 +27,7 @@ const accounttypeRoute = require("./routes/accounttype/accounttype");
 // const OTPRoute = require("./helpers/passwordrecovery");
 const IncomeRoute = require("./routes/incomeandexpenditure/income");
 const ExpenditureRoute = require("./routes/incomeandexpenditure/expenditure");
+const PaymentsRoute = require("./routes/feespayments/payments");
 
 // Middlewares
 
@@ -87,6 +88,7 @@ app.use("/api/departments", DepartmentsRoute);
 // app.use("/api/otp", OTPRoute);
 app.use("/api/income", IncomeRoute);
 app.use("/api/expenditure", ExpenditureRoute);
+app.use("/api/payments", PaymentsRoute);
 
 // Configure sequelize to sync all models and create corresponding tables accordingly
 database.sequelize.sync().then(() => {

@@ -59,6 +59,17 @@ router.post("/", verifyToken, async (req, res) => {
   }
 });
 
+
+
+
+
+
+
+
+
+
+// *****************************************************************************************************
+
 // INITIATE MOMO PAYMENT *******************************************************
 // INITIATE PAYMENT ***********************************************************
 router.post("/payment", async (req, res) => {
@@ -73,17 +84,9 @@ router.post("/payment", async (req, res) => {
     return ref;
   };
 
-  const { contact, amount } = req.body;
   const transactionRef = generateRef();
   const data = {
-    amount,
-    contact,
-    username: "rutemose@gmail.com",
-    api_key: process.env.API_KEY,
-    transaction_reference: transactionRef,
-    narrative: process.env.NARRATIVE,
-    ipn_url: process.env.IPN_URL,
-    fpn_url: process.env.FPN_URL,
+   
   };
 
   // Define the headers to be sent in the POST request
@@ -100,6 +103,22 @@ router.post("/payment", async (req, res) => {
 
     console.log(response.config.data, "res.config.data"); // Handle the response from the external API
     console.log(response.data, "res.data"); // Handle the response from the external API
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // CREATE A NEW FEE AND SAVE IT IN DB, WE WILL UPDTATE IN IPN OR FPN ACCORDINGLY
     const { studentName, amount, scheme, termname, contact, classFeesAMount } =
@@ -123,6 +142,19 @@ router.post("/payment", async (req, res) => {
     return res.status(500).send(err);
   }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ***************************************************************************************************
 

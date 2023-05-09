@@ -61,14 +61,13 @@ router.post("/initiatepayment", async (req, res) => {
             id: generateUniqueId(),
             currency: "UGX",
             amount: amount,
-            description:
-              "We have initiated a payment on the provided phone number, confirm with your pin to confirm.",
+            description: process.env.DESCRIPTION,
             callback_url: process.env.CALLBACK_URL,
             redirect_mode: "",
             notification_id: ipnId,
             branch: "Rwebiita PS",
             billing_address: {
-              email_address: "rwebitaps@gmail.com",
+              email_address: process.env.DEFAULT_EMAIL,
               phone_number,
               country_code: "UG",
               first_name: "John",

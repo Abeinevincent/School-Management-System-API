@@ -116,6 +116,23 @@ router.get("/find/:classname", verifyTokenAndTeacher, async (req, res) => {
   }
 });
 
+// GET student BY Passcode  **************************
+router.get(
+  "/find/getbypasscode/:passcode",
+  verifyTokenAndTeacher,
+  async (req, res) => {
+    try {
+      const student = await Students.findOne({
+        where: { password: req.params.passcode },
+      });
+      return res.status(200).json(student);
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json(err);
+    }
+  }
+);
+
 // DELETE/DEACTIVATE USER  **************************
 router.delete("/:id", verifyTokenAndTeacher, async (req, res) => {
   try {

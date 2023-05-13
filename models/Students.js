@@ -102,6 +102,11 @@ module.exports = (sequelize, DataTypes) => {
       max: 100,
     },
 
+    attendence: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+
     isStudent: {
       type: DataTypes.BOOLEAN,
       defaultValue: true,

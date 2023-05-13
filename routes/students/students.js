@@ -116,6 +116,27 @@ router.get("/find/:classname", verifyTokenAndTeacher, async (req, res) => {
   }
 });
 
+// UPDATE STUDENT ATTENDENCE
+router.put("/update/studentsinaclass/update-attendance", async (req, res) => {
+  const studentsToUpdate = req.body;
+  try {
+    // Update attendance for each student
+    const updatedStudents = await Promise.all(
+      studentsToUpdate.map(async (student) => {
+        const updatedStudent = await Students.update(
+          { attendance: student.attendance },
+          { where: { studentId: student.studentId } }
+        );
+        return updatedStudent;
+      })
+    );
+    return res.status(200).json(updatedStudents);
+  } catch (error) {
+    console.error('Error updating attendance:', error);
+    return res.status(500).json({ error: 'Failed to update attendance' });
+  }
+});
+
 // GET student BY Passcode  **************************
 router.get(
   "/find/getbypasscode/:passcode",

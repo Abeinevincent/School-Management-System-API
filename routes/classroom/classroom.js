@@ -7,7 +7,7 @@ const {
 } = require("../../helpers/jsonwebtoken");
 
 // CREATE A CLASSROOM
-router.post("/income", verifyTokenAndTeacher, async (req, res) => {
+router.post("/", verifyTokenAndTeacher, async (req, res) => {
   // Generate userId with a custom function
   const generateClassroomId = () => {
     let dt = new Date().getTime();
